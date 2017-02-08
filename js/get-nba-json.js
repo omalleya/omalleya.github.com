@@ -86,7 +86,10 @@ function getData(element, statIndex) {
 }
 
 function visualizeStats(dataset) {
-    var svg = d3.select('body').select('svg');
+    var svg = d3.select('body').append('svg')
+                    .attr('width', '100%')
+                    .attr('height', '100px');
+                    
     var circles = svg.selectAll('circle')
                         .data(dataset)
                         .enter()

@@ -1,9 +1,9 @@
 
 //called on button press
-function getPlayer(name) {
-    var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID=101181&PerMode=Totals';
-
-    console.log(name);
+function getPlayer(code) {
+    var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID='
+    var playerProfileURL2 = '&PerMode=Totals';
+    playerProfileURL += code.toString() + playerProfileURL2;
 
     $.ajax({
         url:playerProfileURL,
@@ -15,8 +15,38 @@ function getPlayer(name) {
     });
 }
 
-function getPlayerID(name) {
+function getAllPlayers(name) {
     //TODO worry about players with the same name
+        //find all 
+        //if size > 1 create links to each player 
+        //user selects which one they want
+
+    //TODO consecutive searches
+
+    var urlCode;
+
+    $.ajax({
+        url:'http://stats.nba.com/stats/commonallplayers?&LeagueID=00&Season=2016-17&IsOnlyCurrentSeason=1',
+        dataType: 'jsonp',
+        success: (json) => {
+            console.log(json);
+            var players = json.resultSets[0].rowSet;
+            var possibleCodes = [];
+            possibleCodes.push( players.filter( (playerArray) => {
+                if(playerArray[2].toLowerCase() == name.toLowerCase()) {
+                    return playerArray[0];
+                }
+                return;
+            }));
+            urlCode = possibleCodes[0][0][0];
+            //call to get stats
+            getPlayer(urlCode);
+        },
+        error:function(e){
+            alert('error');
+            console.log(e);
+        },
+    });
 }
 
 //called on succesful ajax request
@@ -74,6 +104,6 @@ window.onload=function(){
     //when window loads add event listener for button press
     document.getElementById("getPlayer").addEventListener("click", () => {
         var playerName = document.getElementById("playerInput").value;
-        getPlayer(playerName);
+        getAllPlayers(playerName);
     });
 }

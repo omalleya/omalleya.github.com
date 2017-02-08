@@ -1,15 +1,22 @@
-var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID=101181&PerMode=Totals';
 
 //called on button press
-function getPlayer() {
-  $.ajax({
-       url:playerProfileURL,
-       dataType: 'jsonp',
-       success: (json) => jsonParse(json),
-       error:function(){
-           alert("Error");
-       },
-  });
+function getPlayer(name) {
+    var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID=101181&PerMode=Totals';
+
+    console.log(name);
+
+    $.ajax({
+        url:playerProfileURL,
+        dataType: 'jsonp',
+        success: (json) => jsonParse(json),
+        error:function(){
+            alert("Error");
+        },
+    });
+}
+
+function getPlayerID(name) {
+    //TODO worry about players with the same name
 }
 
 //called on succesful ajax request
@@ -64,5 +71,9 @@ function visualizeStats(dataset) {
 }
 
 window.onload=function(){
-    document.getElementById("getPlayer").addEventListener("click", getPlayer);
+    //when window loads add event listener for button press
+    document.getElementById("getPlayer").addEventListener("click", () => {
+        var playerName = document.getElementById("playerInput").value;
+        getPlayer(playerName);
+    });
 }

@@ -1,20 +1,5 @@
 
 //called on button press
-function getPlayer(code) {
-    var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID='
-    var playerProfileURL2 = '&PerMode=Totals';
-    playerProfileURL += code.toString() + playerProfileURL2;
-
-    $.ajax({
-        url:playerProfileURL,
-        dataType: 'jsonp',
-        success: (json) => jsonParse(json),
-        error:function(){
-            alert("Error");
-        },
-    });
-}
-
 function getAllPlayers(name) {
     //TODO worry about players with the same name
         //find all 
@@ -22,6 +7,12 @@ function getAllPlayers(name) {
         //user selects which one they want
 
     //TODO consecutive searches
+
+    //TODO color of team
+
+    //TODO use d3 to search array for name
+
+    //TODO responsivesness only works for last set of circles
 
     var urlCode;
 
@@ -45,6 +36,21 @@ function getAllPlayers(name) {
         error:function(e){
             alert('error');
             console.log(e);
+        },
+    });
+}
+
+function getPlayer(code) {
+    var playerProfileURL = 'http://stats.nba.com/stats/playerprofilev2?&PlayerID='
+    var playerProfileURL2 = '&PerMode=Totals';
+    playerProfileURL += code.toString() + playerProfileURL2;
+
+    $.ajax({
+        url:playerProfileURL,
+        dataType: 'jsonp',
+        success: (json) => jsonParse(json),
+        error:function(){
+            alert("Error");
         },
     });
 }
@@ -86,27 +92,67 @@ function getData(element, statIndex) {
 }
 
 function visualizeStats(dataset) {
-    var svg = d3.select('body').append('svg')
+
+    //creates svg element to put circles in
+    var svg = d3.select('body').selectAll('div.container').append('svg')
                     .attr('width', '100%')
-                    .attr('height', '100px');
-                    
+                    .attr('height', '100px')
+                    .attr('id', 'chart');
+
+    var w = parseInt(d3.select('#chart').style('width'), 10);
+    var padding = 40;
+
+    var maxDomain = (dataset.length*50)+100;
+
+    //Creates proper scales for width of all circles height of svg using radius
+    var xScale = d3.scaleLinear()
+                    .domain([0,maxDomain])
+                    .range([padding, w - padding]);
+
+    // scales and axes
+    var rScale = d3.scaleLinear()
+                    .domain([0, 1])
+                    .range([0, w/dataset.length
+                        //w<600 ? w/(dataset.length % 3) : w/dataset.length
+                    ]);
+    
     var circles = svg.selectAll('circle')
                         .data(dataset)
                         .enter()
                         .append('circle')
                         .attr('cx', (d,i) => {
-                            return i*50 + 100 +'px';
+                            return xScale(i*50 + 100);
                         })
                         .attr('cy', '50%')
                         .attr('r', (d) => {
-                            return d*50;
+                                return rScale(d);
                         });
+
+    d3.select(window).on('resize', resize); 
+
+    function resize() {
+        // update width
+        w = parseInt(d3.select('#chart').style('width'), 10);
+        // reset x range
+        xScale.range([padding, w - padding]);
+        rScale.range([0, w/dataset.length]);
+
+        circles.attr('cx', (d,i) => {
+                    return xScale(i*50 + 100);
+                })
+                .attr('cy', '50%')
+                .attr('r', (d) => {
+                    return rScale(d);
+                });
+
+    }
 }
 
 window.onload=function(){
     //when window loads add event listener for button press
     document.getElementById("getPlayer").addEventListener("click", () => {
         var playerName = document.getElementById("playerInput").value;
+        console.log(playerName);
         getAllPlayers(playerName);
     });
 }

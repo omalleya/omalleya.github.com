@@ -2,18 +2,40 @@
 <html lang="en">
   <head>
     <title>NBA D3</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="../js/get-nba-json.js"></script>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
   </head>
 
   <body>
-    <div>
-        <p>Search for any curent NBA player. i.e. "Lebron James", "kevin durant", etc.</p>
-        <p>The below will output the player's career 3 point % for each season as a circle with differing radii.</p>
-        <p>Compare players by performing multiple searches.</p>
-        <p>Reset by refreshing the page.</p>
-        <input type="text" id="playerInput"/>
-        <button type="submit" id="getPlayer">Search</button>
+    <div class="container">
+
+        <div class="page-header">
+          <h1>NBA Data Visualization with D3.js</h1>
+        </div>
+      
+        <p class="lead">
+          Search for any curent NBA player. i.e. "Lebron James", "kevin durant", etc. 
+          The below will output the player's 3 point % per season played as a circle with a representative radius.
+          Compare players by performing multiple searches.
+          Reset by refreshing the page.
+        </p>
+        
+        <form onsubmit="return false">
+          <div class="input-group">
+            <input type="text" class="form-control" id="playerInput" placeholder="Russell Westbrook">
+            <div class="input-group-btn">
+              <button class="btn btn-primary" id="getPlayer" type="submit">
+                Search
+              </button>
+            </div>
+          </div>
+        </form>
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

@@ -75,6 +75,9 @@ function jsonParse(json){
     console.log(json);
     console.log(data);
     visualizeStats(data);
+
+    //enable button now that ajax is complete
+    document.getElementById("getPlayer").disabled = false;
 }
 
 function getRegSeasonTotals(totals) {
@@ -151,6 +154,7 @@ function visualizeStats(dataset) {
 window.onload=function(){
     //when window loads add event listener for button press
     document.getElementById("getPlayer").addEventListener("click", () => {
+        document.getElementById("getPlayer").disabled = true;
         var playerName = document.getElementById("playerInput").value;
         console.log(playerName);
         getAllPlayers(playerName);

@@ -1,3 +1,12 @@
+window.onload=function(){
+    //when window loads add event listener for button press
+    document.getElementById("getPlayer").addEventListener("click", () => {
+        document.getElementById("getPlayer").disabled = true;
+        var playerName = document.getElementById("playerInput").value;
+        console.log(playerName);
+        getAllPlayers(playerName);
+    });
+}
 
 //called on button press
 function getAllPlayers(name) {
@@ -149,14 +158,4 @@ function visualizeStats(dataset) {
                 });
 
     }
-}
-
-window.onload=function(){
-    //when window loads add event listener for button press
-    document.getElementById("getPlayer").addEventListener("click", () => {
-        document.getElementById("getPlayer").disabled = true;
-        var playerName = document.getElementById("playerInput").value;
-        console.log(playerName);
-        getAllPlayers(playerName);
-    });
 }
